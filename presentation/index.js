@@ -26,7 +26,7 @@ import {
 import preloader from "spectacle/lib/utils/preloader";
 
 // Import theme
-import createTheme from "spectacle/lib/themes/default";
+import createTheme from "../assets/theme";
 
 // Require CSS
 require("normalize.css");
@@ -40,7 +40,7 @@ const images = {
 preloader(images);
 
 const theme = createTheme({
-  primary: "#ff4081"
+  primary: "#ffffff"
 });
 
 export default class Presentation extends React.Component {
