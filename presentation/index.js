@@ -34,6 +34,7 @@ require("spectacle/lib/themes/default/index.css");
 
 
 const images = {
+  flush: require("../assets/flush.png")
 };
 
 preloader(images);
@@ -46,6 +47,9 @@ export default class Presentation extends React.Component {
   render() {
     return (
       <Spectacle theme={theme}>
+        <Deck transition={["fade"]} transitionDuration={500}>
+          <Slide bgColor="primary">
+            <Image width="100%" src={images.flush}/>
           </Slide>
         </Deck>
       </Spectacle>
