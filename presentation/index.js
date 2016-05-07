@@ -85,28 +85,50 @@ export default class Presentation extends React.Component {
             <Image width="100%" src={images.vdom23}/>
           </Slide>
           <Slide bgColor="primary" notes="The item answers that React should create a div with the text from the prop.">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom24}/>
           </Slide>
           <Slide bgColor="primary" notes="So React creates the element">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom25}/>
           </Slide>
           <Slide bgColor="primary" notes="and the instance for it">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom26}/>
           </Slide>
           <Slide bgColor="primary" notes="and because div is a component it understands, it creates the mount image too">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom27}/>
           </Slide>
          <Slide bgColor="primary" notes="and it does this two more times to create the full DOM that needs to be inserted">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom28}/>
           </Slide>
          <Slide bgColor="primary" notes="then it goes over to the DOM and wires the children up to the parent. It builds a full mount image out of the mount images of the children">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom29}/>
           </Slide>
           <Slide bgColor="primary" notes="And then it mounts the image into the node, which means it hooks up the div to the container div.">
-            <Image width="100%" src={images.vdom23}/>
+            <Image width="100%" src={images.vdom30}/>
           </Slide>
-          <Slide bgColor="primary" notes="This is when you get the reflow. So that's the initial render. That's what happens when you call React.render() in your webpage.">
-            <Image width="100%" src={images.vdom23}/>
+          <Slide bgColor="primary" notes="This is when you get the reflow. So that's the initial render. That's what happens when you call React.render() in your webpage. We have the element tree which is constructed, and that provides some hints about what instance should be constructed, or how the instance should be changed. And then that instance is used to figure out how the DOM should change.">
+            <Image width="100%" src={images.vdom31}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So now let's take a look at what happens when you do change the DOM... when you actually update the DOM because the user has clicked on something.">
+            <Image width="100%" src={images.vdom32}/>
+          </Slide>
+
+
+
+
+          <Slide bgColor="primary" notes="The user clicks the button. This runs the handler. This handler says something like this.">
+            <Image width="100%" src={images.vdom32}/>
+          </Slide>
+          <Slide bgColor="primary" notes="It computes the new values and calls this.setState() to set them....">
+            <Image width="100%" src={images.vdom32}/>
+          </Slide>
+          <Slide bgColor="primary" notes="Well the this that it refers to is is the instance... the ExponentialList instance. We bound the function to the ExponentialList so that that whenever this is clicked, it's calling setState() on the instance. So what happens when setState is called?">
+            <Image width="100%" src={images.vdom32}/>
+          </Slide>
+          <Slide bgColor="primary" notes="React doesn't immediately handle the state change. Instead, it adds the state to the instance's pendingStateQueue. Then it adds the instance to what's called the dirty components array. It will go on to handle any other setState() calls triggered by this and add those to the dirty component array too. This gives it a chance to batch updates, which can help with the reflow problem.">
+            <Image width="100%" src={images.vdom32}/>
+          </Slide>
+          <Slide bgColor="primary" notes="After it has taken care of all the changes that were possibly triggered, it comes back to this queue and flushes it. One by one, it starts this process using the instance as the root.">
+            <Image width="100%" src={images.vdom32}/>
           </Slide>
         </Deck>
       </Spectacle>
