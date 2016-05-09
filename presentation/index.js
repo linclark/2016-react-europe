@@ -48,11 +48,86 @@ export default class Presentation extends React.Component {
     return (
       <Spectacle theme={theme}>
         <Deck transition={["fade"]} transitionDuration={500}>
-          <Slide bgColor="primary">
-            <Image width="100%" src={images.flush}/>
+          <Slide bgColor="primary" notes="">
+            <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="and through a little bit of trickery makes the ExponentialList element the child of the TopLevelWrapper element. Now that it has this root of the element tree, it can start instantiating elements.">
-            <Image width="100%" src={images.vdom12}/>
+          <Slide bgColor="primary" notes="Hi, I'm Lin Clark and I make code cartoons">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="I also work on a browser, though not the one you might think I do. I'm working with a team at Mozilla to create a new experimental browser. The project is called Project Tofino.... And it's built with React, so if you want to hack on it you can.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="today I'm going to be talking about performance in React. I should start by saying I'm not going to be telling you anything that you haven't already heard. I'm going to be talking about things like keys, and shouldComponentUpdate, and immutability. The reason I wanted to talk about them though...">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="is because I think a lot of times we have a fuzzy understanding of these things. There are so many new things coming in all the time, that it's hard to take the time to really bring these ideas into focus. Instead, we let the received knowledge stay kind of fuzzy. That makes it really hard...">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="when new concepts come in that build on those ideas... it makes it hard to bring those new ideas into focus. So we just follow the recommendations of people we assume are smarter than us. But I want us to understand the why behind these things. Why use shouldComponentUpdate... and when? Because sometimes it might not be the best solution.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So I want to bring these ideas into focus so you have a better idea of what the problems are and which recommendations fix which problems.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="I'll start by brining the concept of performance into focus, and I should say that I'm talking about a very specific part of performance, render performance. There are other parts of the performance equasion, but I won't touch on those. In this talk, when I say performance, I mean the speed that you render the page for the user for the first time, and the speed with which you update the page when the user interacts with it.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="You can kind of think of this like a project you're doing at work... like a web site.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The first, initial render is kind of like the launch of the site... and then every interaction is like a new feature release to the site.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="To extend this metaphor, your code is kind of like the project lead. It's the one planning the project and telling folks what to do. Unfortunately, only one person is assigned to do the work on the project... and that's the main thread.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The main thread is kind of like a full stack developer... it takes care of all of these different things. It takes care of JavaScript, it takes care of doing things with the DOM, and it takes care of layout, figuring out what should go on the page and what the layout of those things.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="so just as when you're working on a project in real life, if you want to deliver things quickly, you're going to need to limit the work that you're putting on this one worker bee that you have. You don't want to overload them. You need to reduce the amount of work. And that's really what performance is about, reducing the amount of work you need to do.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="but before we know how to reduce the amount of work that the main thread is doing, we need to know more about the work that the main thread does.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+
+
+
+          <Slide bgColor="primary" notes="As I mentioned before, the main thread is in charge of JavaScript, the DOM, and layout. You obviously know what JavaScript is, that's all of the functions your code is defining and calling..">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The DOM is the way the functions tell the page what to do. Basically the DOM gives you a set of objects that you can move around and manipulate in order to get the browser to change the page. Let's say we want to change the way a div looks. So the JS code could ask the main thread to add a class to the DOM element, this div. Then the main thread would recompute the styles and layout for the page, and then tell another part of the browser that it needs to change the pixels on the page.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="But the main thread doesn't do that recomputation every time the DOM changes. If it did, it would be spending most of it's time calculating what the browser should look like over and over again. Instead, what it tries to do is batch as many of these into the same group as possible. That makes its work more efficient.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So we want to reduce the amount of work that the main thread has to do. Two good ways are 1. don't have your JS code make changes to the DOM unless they are necessary, and 2. if the JS code does have to make changes, be considerate to the main thread and how it works and group the requests for changes. That way the main thread can batch them.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="And this is something that React helps you do. Now I want to be clear... React isn't the only way to do this. It's not actually a necessary part of doing this. These ideas have been around since well before React. These are already an accepted part of web development practice. So you can get as good or better performance with vanilla JS as you can React. It's not that React is necessarily faster than vanilla.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The thing is, though, in order to get that performance, your code has to be smart. Your code needs to know how to direct the main thread pretty precisely to do these things.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="To go back to the metaphor, your code, the project lead on this project, needs to be both a really really good product manager... it needs to know what you should ship, and it also needs to be a really really good tech lead, it needs to know the most efficient way to direct the main thread in shipping.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="Of course, your code is only as smart as you make it. So it means that all of the developers on your team have to have a really solid grasp of all of these concepts, and also not make mistakes.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="What React does for you is that it offloads that work. It's kind of like your code brings in a consultant to do the tech lead work, which frees up your code to just be a good product manager... to specifically focus on what needs to happen, not on how to make it happen, but on what the product should do, what the page should display.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="This tech lead just happens to be a robot named React.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So let's take a look at how these two work together to direct the main thread in creating the initial render.">
+            <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="We'll start with the webpage that your team is going to be building... a button with a list. When you click the button, it will multiply the value by itself.">
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="This means creating another tree which is pretty similar to the element tree, but actually has state.">
             <Image width="100%" src={images.vdom13}/>
