@@ -7,6 +7,7 @@ import {
   BlockQuote,
   Cite,
   CodePane,
+  Code,
   Deck,
   Fill,
   Heading,
@@ -33,9 +34,26 @@ require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
 
 
+const imageSets = {
+  vdom: 8,
+  notecard: 4,
+}
+
 const images = {
-  flush: require("../assets/flush.png")
+  flush: require("../assets/flush.png"),
 };
+
+let num;
+let index;
+for (var prefix in imageSets) {
+  num = imageSets[prefix];
+  for (let i = 1; i < num + 1; i++) {
+    index = i < 10 ? `0${i}` : i;
+    images[`${prefix}${index}`] = require(`../assets/${prefix}${index}.png`);
+  }
+};
+
+
 
 preloader(images);
 
@@ -54,7 +72,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="Hi, I'm Lin Clark and I make code cartoons">
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="I also work on a browser, though not the one you might think I do. I'm working with a team at Mozilla to create a new experimental browser. The project is called Project Tofino.... And it's built with React, so if you want to hack on it you can.">
+          <Slide bgColor="primary" notes="I also work for Mozilla on a browser, though not the one you might think I do. We're working on a new experimental browser. The project is called Project Tofino.... And it's built with React, so if you want to hack on it you can. Feel free to ask me about it afterwards.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="today I'm going to be talking about performance in React. I should start by saying I'm not going to be telling you anything that you haven't already heard. I'm going to be talking about things like keys, and shouldComponentUpdate, and immutability. The reason I wanted to talk about them though...">
@@ -120,10 +138,10 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="What React does for you is that it offloads that work. It's kind of like your code brings in a consultant to do the tech lead work, which frees up your code to just be a good product manager... to specifically focus on what needs to happen, not on how to make it happen, but on what the product should do, what the page should display.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="This tech lead just happens to be a robot named React.">
+          <Slide bgColor="primary" notes="This tech lead just happens to be a robot named React. And the tool that it uses to automate this work is the virtual DOM.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="So let's take a look at how these two work together to direct the main thread in creating the initial render.">
+          <Slide bgColor="primary" notes="So let's take a look at how these two—React and your code—work together to direct the main thread in creating the initial render.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="We'll start with the webpage that your team is going to be building... a button with a list. When you click the button, it will multiply the value by itself.">
@@ -131,44 +149,93 @@ export default class Presentation extends React.Component {
           </Slide>
 
 
-          <Slide bgColor="primary" notes="The starting point that your team is working from is this. The user has downloaded a page. That page has at least one element that is going to be the container for the content that you're creating">
+          <Slide bgColor="primary" notes="The starting point that your team is working from is this.">
+            <Image width="100%" src={images.vdom01}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The user has downloaded a page.">
+            <Image width="100%" src={images.vdom02}/>
+          </Slide>
+          <Slide bgColor="primary" notes="That page has at least one element that is going to be the container for the content that you're creating">
+            <Image width="100%" src={images.vdom03}/>
+          </Slide>
+          <Slide bgColor="primary" notes="At this point, React has been loaded and so has your code,">
+            <Image width="100%" src={images.vdom04}/>
+          </Slide>
+          <Slide bgColor="primary" notes="including components... which are basically deputy product managers in charge of specific parts of the product.">
+            <Image width="100%" src={images.vdom05}/>
+          </Slide>
+          <Slide bgColor="primary" notes="Your code asks React to create an element, and tells React to work with the List component to do this.">
+            <Image width="100%" src={images.vdom06}/>
+          </Slide>
+          <Slide bgColor="primary" notes="What's an element? it's just a JavaScript object that React uses to create an instance. It's a description of that that instance should be. In our project, it's kind of like how you might have a note card with the requirements for the feature you're going to build.">
+            <Heading size={2}>What's an element?</Heading>
+            <Image width="100%" src={images.notecard01}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The element has the type...">
+            <Heading size={2}>What's an element?</Heading>
+            <Image width="100%" src={images.notecard02}/>
+          </Slide>
+          <Slide bgColor="primary" notes="and the props and pointers to any children elements">
+            <Heading size={2}>What's an element?</Heading>
+            <Image width="100%" src={images.notecard03}/>
+          </Slide>
+          <Slide bgColor="primary" notes="The type tells React what component it should use to create the instance. React is going to put this note card to the side for a bit. It will use it later to create the instance. So that raises the question...">
+            <Heading size={2}>What's an element?</Heading>
+            <Image width="100%" src={images.notecard04}/>
+          </Slide>
+          <Slide bgColor="primary" notes="What's the instance? It's this internal thing that React uses to figure out what DOM nodes it needs to create, or update. It's an instance of the component that your code defines. This is where this.state and this.props live, on the instance, but those interactions are pretty much the only ones you'll have with the instance. You code doesn't create or manage instances. Your code just passes off the requirements for it, in the form of an element.">
+            <Heading size={2}>What's the instance?</Heading>
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="At this point, React has been loaded and so has your code, including components... which are basically deputy product managers in charge of specific parts of the product.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="So React creates an element.">
+            <Image width="100%" src={images.vdom07}/>
           </Slide>
-          <Slide bgColor="primary" notes="Your code asks React to create an element using some props, and tells React to work with the List component to do this. What's an element? it's just a JavaScript object, kind of like a post-it note that has the type and the props that React is going to use to create the instance?">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="Then it returns the element to your code and your code tells React to start rendering that element into the container">
+            <Image width="100%" src={images.vdom08}/>
           </Slide>
-          <Slide bgColor="primary" notes="What's the instance? It's an instance of the component. It's the thing that holds on to the state, the props, the refs.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="If you're getting a little lost about where we are, this is the code that I'm talking about. So this kicks off the creation of the render tree. React creates this thing called a...">
+            <Code>
+              ReactDOM.render(&lt;List /&gt;, document.getElementById("app"))
+            </Code>
           </Slide>
-          <Slide bgColor="primary" notes="So React creates an element. It makes a note on the element that it will be working with the List component for this element.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="TopLevelWrapper which is really just for its own organization. Then React starts creating the instances.">
+            <Image width="100%" src={images.vdom09}/>
           </Slide>
-          <Slide bgColor="primary" notes="Then it gives the element to your code and your code tells React to start rendering that element into the container that's in the HTML">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="React creates an instance for the TopLevelWrapper.">
+            <Image width="100%" src={images.vdom10}/>
           </Slide>
-          <Slide bgColor="primary" notes="So this kicks off the creation of the render tree. React creates this thing called a TopLevelWrapper which is really just for its own organization. Then it makes TopLevelWrapper render to your top level component.">
+          <Slide bgColor="primary" notes="and React has wired it up so that it renders to the List component.">
+            <Image width="100%" src={images.vdom11}/>
+          </Slide>
+          <Slide bgColor="primary" notes="and React has wired it up so that it renders to the List component.">
             <Image width="100%" src={images.vdom12}/>
           </Slide>
-          <Slide bgColor="primary" notes="Because this is the initial render, this is going to kick off the mounting process. At the end of the mounting process, it will have all of the DOM nodes it needs to show the user the webpage. To kick off the process, it creates an instance for the TopLevelWrapper and then it starts going through this recurrsive process">
+          <Slide bgColor="primary" notes="To do that, it starts creating the List instance. It sets the props and the state on the instance. Then it realizes that it doesn't know what gets shown for a List... if it were a div or something like that, some component that React provides, it would know what to do. But since it doesn't know, it asks the List component. And the way it asks is by calling render.">
+            <Image width="100%" src={images.vdom13}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So ExponentialList component tells React to create a button element, and an Item element for each item in this.state.items, and then to make those children of a div.">
             <Image width="100%" src={images.vdom14}/>
           </Slide>
-          <Slide bgColor="primary" notes="First it gets to creating the ExponentialList instance. It sets the props and the state on the instance. Then it realizes that it doesn't know what gets shown for an ExponentialList... if it were a div or something like that, something standard, it would know what to do. But since it doesn't know, it asks the ExponentialList component. And the way it asks is by calling render.">
+          <Slide bgColor="primary" notes="React creates these elements... it doesn't care about the fact that it doesn't know what Item renders to yet.">
             <Image width="100%" src={images.vdom15}/>
           </Slide>
-          <Slide bgColor="primary" notes="So ExponentialList component tells React to create a button element, and an Item element for each item in this.state.items.">
+          <Slide bgColor="primary" notes="">
+            <Image width="100%" src={images.vdom16}/>
+          </Slide>
+          <Slide bgColor="primary" notes="">
             <Image width="100%" src={images.vdom17}/>
           </Slide>
-          <Slide bgColor="primary" notes="React creates these elements all at once... it doesn't care about the fact that it doesn't know what Item renders to.">
+          <Slide bgColor="primary" notes="">
             <Image width="100%" src={images.vdom18}/>
           </Slide>
-          <Slide bgColor="primary" notes="It starts to instantiate the div. Since that's a native component, one of it's internal components, it knows exactly what kind of DOM interaction it needs to do to create it. So it does that.">
+          <Slide bgColor="primary" notes=".... and then It starts to instantiate the div.">
             <Image width="100%" src={images.vdom19}/>
           </Slide>
-          <Slide bgColor="primary" notes="It crosses over to the DOM and creates a div. Note that it didn't make the div a child of the app container yet. That would have caused a reflow.">
+          <Slide bgColor="primary" notes="Since that's a native component, one of it's internal components, it knows exactly what kind of DOM interaction it needs to do to create it.">
             <Image width="100%" src={images.vdom20}/>
+          </Slide>
+          <Slide bgColor="primary" notes="So it does that. It crosses over to the DOM and creates a div. Note that it didn't make the div a child of the app container yet. That would have caused a reflow.">
+            <Image width="100%" src={images.vdom21}/>
           </Slide>
           <Slide bgColor="primary" notes="Now it needs to instantiate the children. It will go through the div's list of children and flatten it, and give each child a name called a key... this will be important later. Then it will go through and call mountComponent for all of the children.">
             <Image width="100%" src={images.vdom21}/>
@@ -211,13 +278,13 @@ export default class Presentation extends React.Component {
 
 
           <Slide bgColor="primary" notes="The user clicks the button. This runs the handler. This handler says something like this.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.ss01}/>
           </Slide>
           <Slide bgColor="primary" notes="It computes the new values and calls this.setState() to set them....">
             <Image width="100%" src={images.vdom32}/>
           </Slide>
           <Slide bgColor="primary" notes="Well the this that it refers to is is the instance... the ExponentialList instance. We bound the function to the ExponentialList so that that whenever this is clicked, it's calling setState() on the instance. So what happens when setState is called?">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.ss02}/>
           </Slide>
           <Slide bgColor="primary" notes="React doesn't immediately handle the state change. Instead, it adds the state to the instance's pendingStateQueue. Then it adds the instance to what's called the dirty components array. It will go on to handle any other setState() calls triggered by this and add those to the dirty component array too. This gives it a chance to batch updates, which can help with the reflow problem.">
             <Image width="100%" src={images.vdom32}/>
@@ -228,7 +295,7 @@ export default class Presentation extends React.Component {
 
 
 
-          <Slide bgColor="primary" notes="We only have one component in the queue, so that is the only one we'll process. The component that had setState() called is treated as the root of a subtree, so we start processing from there.">
+          <Slide bgColor="primary" notes="We only have one component in the queue, so that is the only one we'll process. The component that had setState() called is treated as the root of a subtree, so we start processing from there. I'm going to turn the existing tree grey. All of this grey are the previous elements and rendered components. They'll be used for comparing against the next.">
             <Image width="100%" src={images.vdom32}/>
           </Slide>
           <Slide bgColor="primary" notes="React calculates what the next context, props, and state would be. Then it sets these on the instance.">
@@ -307,9 +374,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="If you were updating it this way... by setting a new variable to this.state.items, pushing a new item onto the array, and then calling setState with that, then you would see this bug. What would happen is that you'd never see new messages. Your shouldComponentUpdate would always return false. Why is this?">
             <Image width="100%" src={images.imageName}/>
             <pre>
-              let newArray = this.state.items;
-  newArray.push("test");
-  this.setState({items: newArray})
+
   </pre>
           </Slide>
           <Slide bgColor="primary" notes="It's because even though you have two names for this thing, both names still point to the same thing. So they are equal, because they are just different names for the same exact thing. If you change this.state.items, you're also changing newArray and vice versa. One way to fix this is to create a new object each time...">
@@ -318,21 +383,13 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="So for example, using concat to generate a new array based on the old one. However, that would break our shouldComponentUpdate in the other direction. It would return true each time. That's because each pass through, there is a new object. You could make it work by doing a deepEquals...">
             <Image width="100%" src={images.imageName}/>
             <pre>
-              let newMessages = fetchMessages();
-  let newArray = this.state.items.concat(newMessages);
-  this.setState({items: newArray})
+
   </pre>
           </Slide>
           <Slide bgColor="primary" notes="but depending on how many times this runs through shouldComponentUpdate and how complicated the state structure is, that might actually take more work, not less. It would be nice to have that simple, quick equals check but still catch changes to the data.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="And this is what immutability gives you. With immutable data, if two variables are pointing to the same object, you know that the data hasn't changed. If it does need you change, you create a new object. So if you're using immutable data, then you can do these simple equality checks, which are fast.">
-            <Image width="100%" src={images.imageName}/>
-          </Slide>
-          <Slide bgColor="primary" notes="Now one thing you have to watch out for with Immutability as it's done in JS is nested data structures. With libraries like Immutable.js, you can have the top level object be immutable, but lower level objects are not. So changes could still be happening deep in the data structure, which negates the purpose.">
-            <Image width="100%" src={images.imageName}/>
-          </Slide>
-          <Slide bgColor="primary" notes="but you can make the other levels of the data structure immutable, too, and reflect changes up the chain to the top level object. So if an object down here changes, it gets a new identity, and it's parent gets a new identity, and the top level object gets a new identity.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="If you're using immutable structures like this, you can actually skip writing your own shouldComponentUpdate functions all together and use PureRenderMixin, which just applies the same simple shouldComponentUpdate to everything.">
