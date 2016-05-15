@@ -35,7 +35,8 @@ require("spectacle/lib/themes/default/index.css");
 
 
 const imageSets = {
-  vdom: 8,
+  ui: 3,
+  vdom: 34,
   notecard: 4,
 }
 
@@ -144,8 +145,14 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="So let's take a look at how these two—React and your code—work together to direct the main thread in creating the initial render.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="We'll start with the webpage that your team is going to be building... a button with a list. When you click the button, it will multiply the value by itself.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="We'll start with the webpage that your team is going to be building... a button with a list.">
+            <Image width="100%" src={images.ui01}/>
+          </Slide>
+          <Slide bgColor="primary" notes="When you click the button, it will multiply the value by itself">
+            <Image width="100%" src={images.ui02}/>
+          </Slide>
+          <Slide bgColor="primary" notes=".... So let's walk through the initial render">
+            <Image width="100%" src={images.ui03}/>
           </Slide>
 
 
@@ -298,8 +305,8 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="We only have one component in the queue, so that is the only one we'll process. The component that had setState() called is treated as the root of a subtree, so we start processing from there. I'm going to turn the existing tree grey. All of this grey are the previous elements and rendered components. They'll be used for comparing against the next.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
-          <Slide bgColor="primary" notes="React calculates what the next context, props, and state would be. Then it sets these on the instance.">
-            <Image width="100%" src={images.vdom32}/>
+          <Slide bgColor="primary" notes="React calculates what the list's next context, props, and state would be. Then it sets these on the instance.">
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="It grabs a copy of the element that ExponentialList rendered to last time. Then it creates a new rendered version of that by calling render again and giving the new props, state and context.">
             <Image width="100%" src={images.imageName}/>
