@@ -281,46 +281,46 @@ export default class Presentation extends React.Component {
             <Image width="100%" src={images.ss01}/>
           </Slide>
           <Slide bgColor="primary" notes="It computes the new values and calls this.setState() to set them....">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="Well the this that it refers to is is the instance... the ExponentialList instance. We bound the function to the ExponentialList so that that whenever this is clicked, it's calling setState() on the instance. So what happens when setState is called?">
             <Image width="100%" src={images.ss02}/>
           </Slide>
           <Slide bgColor="primary" notes="React doesn't immediately handle the state change. Instead, it adds the state to the instance's pendingStateQueue. Then it adds the instance to what's called the dirty components array. It will go on to handle any other setState() calls triggered by this and add those to the dirty component array too. This gives it a chance to batch updates, which can help with the reflow problem.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="After it has taken care of all the changes that were possibly triggered, it comes back to this queue and flushes it.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
 
 
 
           <Slide bgColor="primary" notes="We only have one component in the queue, so that is the only one we'll process. The component that had setState() called is treated as the root of a subtree, so we start processing from there. I'm going to turn the existing tree grey. All of this grey are the previous elements and rendered components. They'll be used for comparing against the next.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="React calculates what the next context, props, and state would be. Then it sets these on the instance.">
             <Image width="100%" src={images.vdom32}/>
           </Slide>
           <Slide bgColor="primary" notes="It grabs a copy of the element that ExponentialList rendered to last time. Then it creates a new rendered version of that by calling render again and giving the new props, state and context.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="It point's the div's currentElement property to the new element.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="If it had updates to the div's DOM properties, it would do those now, but it doesn't.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="Then it goes through the same child process it did before. It flattens them into an array with keys. It goes through the two arrays and compares the children">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="It gets to the button. Since nothing has changed, it doesn't need to go over to the DOM">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="It gets to the first item. It computes the nextProps, nextContext and nextState for the item. Then it will call render to figure out the next element.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="The rendered element is a div and it only has a single child, which is a number. From this, React knows it's at a leaf and it can see if the DOM needs to be updated. It does the comparison between the old content and the new, sees that it needs to update it. It follows the arrow to figure out which node this corresponds to. Then it makes the update on that node.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
 
 
@@ -328,39 +328,39 @@ export default class Presentation extends React.Component {
 
 
           <Slide bgColor="primary" notes="So that's how React makes things faster. It figures out the smallest number of changes that it needs to make to the DOM and batches them all together so the browser can do a smaller number of reflows. But there's still a good amount of work happening here. We can reduce the amount of work done here further by telling React a little bit more about the specifics of our app and giving it a few shortcuts it can take. These are the optimizations you hear people talking about. The first of these is one you probabaly know about...">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="because React tells you. Whenever you're creating an array of children using map, it's going to tell you that you should be using keys. So I want to show you why this helps.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="Let's change up our example to one that will really highlight this. This time instead of an ExponentialList, we're going to have a SortableList. When you click the button, it's going to reverse order">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="So we go through setState and get all the way to where it creates the new flattened array and compares it to the old one">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="Let's take a closer look at how it does this comparison. As I mentioned, it gives each item a name, called a key. When React is doing the comparison between the old and the new, it will match them using the key. Well, when React assigns this, it just uses the array position of the item. So for almost everything in the list (except the middle item), React thinks that the value has changed when it has really just moved.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="So it will end up replacing the contents of the items, except the middle one.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="Now let's say we had given React meaningful keys... say, the name of the fruit. It would be able to compare each to the correct previous element and realize that nothing had changed">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="So it would know that it could just reorder the DOM elements. Now, in this case it doesn't really save you much work. But just imagine if each of these items in the list was a complex DOM structure with lots of nodes. That could be a real time savings. But it's only really a time savings if your list is going to be reordered... for example, if you are reversing the order or shifting items off of the top. Otherwise, the keys that React provides using the array index will work just the same as any key you give. This is one of the reasons that it's important to understand the why behind the recommendation... because recommendations don't always have the same impact across different use cases.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
 
 
           <Slide bgColor="primary" notes="Let's look at a use case where keys wouldn't have as much of an impact, but where another trick would. It's a list where new items are being fetched from a server and added to the end of the list.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="And lets say the user pushes the button but there are no new messages.">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="React is going to go through the process of building out the render tree—creating the elements and updating the instances—even though nothing needs to change in the DOM. This is called wasted time. You can see it in React perf tools. So how can you avoid wasting time like this? I'm sure you've heard of one way...">
-            <Image width="100%" src={images.vdom32}/>
+            <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="that's shouldComponentUpdate. When a component has a shouldComponentUpdate method, React will use it to short circuit work. Once it figures out the new state and props it will say to the component, 'Hey, should I even bother rendering you?' The component has a chance to check the old state and props vs the new state and props">
             <Image width="100%" src={images.imageName}/>
