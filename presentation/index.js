@@ -127,7 +127,7 @@ export default class Presentation extends React.Component {
             `}>
             <ol style={{textAlign: "left"}}>
             <Appear><li>The basics of browser rendering</li></Appear>
-            <Appear><li>How the virtual DOM speeds rendering up</li></Appear>
+            <Appear><li>Minimizing and batching DOM changes with the virtual DOM</li></Appear>
             <Appear><li>What you can do to make it faster</li></Appear>
             </ol>
           </Slide>
@@ -228,7 +228,7 @@ export default class Presentation extends React.Component {
             `}>
             <ol style={{textAlign: "left"}}>
             <li>The basics of browser rendering</li>
-            <Appear><li>How the virtual DOM speeds rendering up</li></Appear>
+            <Appear><li>Minimizing and batching DOM changes with the virtual DOM</li></Appear>
             </ol>
           </Slide>
           <Slide bgColor="primary" notes="We'll start with the webpage that your team is going to be building... a button with a list.">
@@ -283,10 +283,18 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="Then your code tells React to start rendering that element into the container">
             <Image width="100%" src={images.vdom08}/>
           </Slide>
-          <Slide bgColor="primary" notes="This begins the construction of the render tree. This is going to be a bit of a process. If you don't follow, don't worry... this is being recordeded so you can watch later. React starts off by creating this thing called the TopLevelWrapper...">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>begins construction of React's render tree</li>
+            <li>if you don't follow, being recorded</li>
+            <li>has changed, will again</li>
+            <li>...</li>
+            <li>React starts by creating the TopLevelWrapper</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom08}/>
           </Slide>
-          <Slide bgColor="primary" notes="which is really just for its own organization.">
+          <Slide bgColor="primary" notes="which is really just for its own organization, and will probably be removed soon.">
             <Image width="100%" src={images.vdom09}/>
           </Slide>
           <Slide bgColor="primary" notes="React creates an instance for the TopLevelWrapper.">
@@ -295,58 +303,123 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="and React has wired it up so that it renders to the List component.">
             <Image width="100%" src={images.vdom11}/>
           </Slide>
-          <Slide bgColor="primary" notes="and React has wired it up so that it renders to the List component.">
+          <Slide bgColor="primary" notes="">
             <Image width="100%" src={images.vdom12}/>
           </Slide>
-          <Slide bgColor="primary" notes="To do that, it starts creating the List instance. It sets the props and the state on the instance. Then it realizes that it doesn't know what gets shown for a List... if it were a div or something like that, some component that React provides, it would know what to do. But since it doesn't know, it asks the List component. And the way it asks is by calling render.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>starts creating List instance</li>
+            <li>sets props and state</li>
+            <li>then it wants to create corresponding DOM</li>
+            <li>doesn't know how</li>
+            <li>if it were native component, it would know</li>
+            <li>has to ask</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom13}/>
           </Slide>
-          <Slide bgColor="primary" notes="So List component tells React to create a bunch of different elements... an Item element for each item in this.state.items, a button element, and then a div element to wrap those.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>List responds with the elements</li>
+            <li>button</li>
+            <li>take the this.state.items array and create an Item for each</li>
+            <li>wrap all of that with a div element</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom14}/>
           </Slide>
-          <Slide bgColor="primary" notes="React creates these elements... it doesn't care about the fact that it doesn't know what Item renders to yet. and then">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>React creates those elements</li>
+            <li>Doesn't care that it doesn't know what DOM interactions it needs for Item</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom19}/>
           </Slide>
-          <Slide bgColor="primary" notes="It starts to instantiate the div because the div is the wrapper. The div contains all the other elements">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>it creates the instance for the wrapping div</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom21}/>
           </Slide>
-          <Slide bgColor="primary" notes="Since that's a native component, one of it's internal components, it knows exactly what kind of DOM interaction it needs to do to create it. So it does that.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>it knows what DOM it needs to create for a div</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom22}/>
           </Slide>
-          <Slide bgColor="primary" notes="It crosses over to the DOM and creates a div. Note that it didn't make the div a child of the app container yet. That would have caused a reflow..... So now it needs to create instances for the children... that is, the button and each of the items. To make it easier to handle, it turns a complex child structure into a flat one.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>crosses over to DOM and creates div</li>
+            <li>Note! it didn't make div a child</li>
+            <li>would have caused reflow</li>
+            <li>....</li>
+            <li>so now it needs to create instances for all those children</li>
+            <li>complex to simple structure</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom23}/>
           </Slide>
-          <Slide bgColor="primary" notes="So the element has this array of children. When React flattens them, it gives each one a name. The button is .0">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>element starts with this</li>
+            <li>in moving over to the instance, it flattens this structure.</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.flatten01}/>
           </Slide>
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>creates an object</li>
+            <li>prop name represents its place in the structure</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.flatten02}/>
           </Slide>
-          <Slide bgColor="primary" notes="and then the items each get a name that starts with 1, because that was the index of the array, and then includes the index within the array. If the items had keys assigned, those would have been used for the second value instead of their indexes. This becomes important later.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>because the items are nested, their prop names have two levels</li>
+            <li>if the item had a key, would be used here</li>
+            <li>will talk about that later</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.flatten03}/>
           </Slide>
-          <Slide bgColor="primary" notes="so it creates the instances">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>takes this flattened list</li>
+            <li>creates the instances</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom23}/>
           </Slide>
-          <Slide bgColor="primary" notes="Now that the instances are created, it's time to make DOM elements.">
+          <Slide bgColor="primary" notes="Now time to make DOM elements">
             <Image width="100%" src={images.vdom24}/>
           </Slide>
-          <Slide bgColor="primary" notes="The button is a native component, so React creates it">
+          <Slide bgColor="primary" notes="React knows how to create the button DOM node, so it does">
             <Image width="100%" src={images.vdom25}/>
           </Slide>
-          <Slide bgColor="primary" notes="The item is another composite component, so React has to ask what it renders to.">
+          <Slide bgColor="primary" notes="It doesn't know what DOM to create for Item, so it asks">
             <Image width="100%" src={images.vdom26}/>
           </Slide>
-          <Slide bgColor="primary" notes="It renders to a div">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>Item says:</li>
+            <li>create a div element</li>
+            <li>use the prop that was passed in as text content</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom27}/>
           </Slide>
-          <Slide bgColor="primary" notes="React creates the element">
+          <Slide bgColor="primary" notes="React creates the div element">
             <Image width="100%" src={images.vdom28}/>
           </Slide>
           <Slide bgColor="primary" notes="and the instance for it">
             <Image width="100%" src={images.vdom29}/>
           </Slide>
-          <Slide bgColor="primary" notes="and because div is a component it understands, it creates the DOM node too">
+          <Slide bgColor="primary" notes="and the DOM node too">
             <Image width="100%" src={images.vdom30}/>
           </Slide>
          <Slide bgColor="primary" notes="and it does this two more times to create the full DOM that needs to be inserted">
@@ -358,10 +431,21 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="And then it hooks up the wrapper div to the container div.">
             <Image width="100%" src={images.vdom33}/>
           </Slide>
-          <Slide bgColor="primary" notes="This is when you get the reflow. So that's the initial render. That's what happens when you call React.render() in your webpage. We have the element tree which is constructed, and that provides some hints about what instance should be constructed, or how the instance should be changed. And then that instance is used to figure out how the DOM should change.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>this is when you get that reflow</li>
+            <li>main thread calculates render tree</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom34}/>
           </Slide>
-          <Slide bgColor="primary" notes="So now let's take a look at what happens when you do change the DOM... when you actually update the DOM because the user has clicked on something.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>and we get our UI</li>
+            <li>so that's initial render</li>
+            <li>now, let's see how the virtual DOM handles a user interaction</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.vdom35}/>
           </Slide>
 
