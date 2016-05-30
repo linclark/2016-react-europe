@@ -48,6 +48,8 @@ const imageSets = {
   keys: 3,
   immutable: 6,
   keyComparison: 6,
+  scu: 5,
+  connect: 12,
 }
 
 const images = {
@@ -461,16 +463,53 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="React figures out the onClick handler for this. ">
             <Image width="100%" src={images.vdom35}/>
           </Slide>
-          <Slide bgColor="primary" notes="This click handler was created in the List instance and we bound it to the list, so when we call this.setState...">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>uses event delegation for this</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.ss01}/>
+          </Slide>
+          <Slide notes={`
+            <ul>
+            <li>the handler is something like this</li>
+            <li>and if you think you see a possible bug, we'll get to that later</li>
+            <li> . . . .</li>
+            <li>would have been defined on the list instance which created the button element</li>
+            <li>bound to the list instance, so when it calls this.setState()...</li>
+            </ul>
+            `}>
+            <pre style={{textAlign: "left"}}>{`
+            handleClick = () => {
+              let nextItems = this.state.items;
+
+              // Calculate new values
+
+              this.setState({
+                items: nextItems
+              })
+            }
+            `}</pre>
           </Slide>
           <Slide bgColor="primary" notes="it calls setState() on the instance. So what happens when setState is called?">
             <Image width="100%" src={images.ss02}/>
           </Slide>
-          <Slide bgColor="primary" notes="React doesn't immediately handle the state change. Instead, it adds the state to the list of state changes the instance needs to make.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>doesn't immediately handle state change</li>
+            <li>adds state to a list on the instance of pending state changes</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.flush01}/>
           </Slide>
-          <Slide bgColor="primary" notes="Then it adds the instance to what's called the dirty components array. It will go on to handle any other setState() calls triggered by this and add those to the dirty component array too. This gives it a chance to batch updates, which can help with the reflow problem.">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>then it queues up the update</li>
+            <li>adds to dirty components array</li>
+            <li>lets it sit there</li>
+            <li>does the same for any other state changes that might have been triggered</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.flush02}/>
           </Slide>
           <Slide bgColor="primary" notes="After it has taken care of all the changes that were possibly triggered, it comes back to this queue and flushes it.">
@@ -528,8 +567,15 @@ export default class Presentation extends React.Component {
 
 
 
-          <Slide bgColor="primary" notes="So that's how React makes things faster. It figures out the smallest number of changes that it needs to make to the DOM and batches them all together so the browser can do a smaller number of reflows. But there's still a good amount of work happening here. how can we reduce this? The first technique is probably one you know">
+          <Slide bgColor="primary" notes="So that's how React makes things faster. It figures out the smallest number of changes that it needs to make to the DOM and batches them all together so the browser can do a smaller number of reflows. But there's still a good amount of work happening here. how can we reduce this?">
             <Image width="100%" src={images.imageName}/>
+          </Slide>
+          <Slide bgColor="primary" notes="This brings us to the third part of the talk. And the first technique is probably one that you already know...">
+            <ol style={{textAlign: "left"}}>
+            <li>The basics of browser rendering</li>
+            <li>Minimizing and batching DOM changes with the virtual DOM</li>
+            <Appear><li>What you can do to make it faster</li></Appear>
+            </ol>
           </Slide>
           <Slide bgColor="primary" notes="because React tells you. Whenever you're creating an array of children using map, it's going to tell you that you should be using keys. So I want to show you why this helps.">
             <Image width="100%" src={images.keyWarning01}/>
@@ -581,10 +627,10 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="React is going to go through the process of building out the render tree—creating the elements and updating the instances—even though nothing needs to change in the DOM. This is called wasted time. You can see it in React perf tools. So how can you avoid wasting time like this? I'm sure you've heard of one way...">
             <Image width="100%" src={images.scu01}/>
           </Slide>
-          <Slide bgColor="primary" notes="that's shouldComponentUpdate. When a component has a shouldComponentUpdate method, React will use it to short circuit work. Once it figures out the new state and props it will say to the component, 'Hey, should I even bother rendering you?' The component has a chance to check the old state and props vs the new state and props">
+          <Slide bgColor="primary" notes="that's shouldComponentUpdate.">
             <pre style={{textAlign: "left"}}>
 {`shouldComponentUpdate(nextProps, nextState) {
-  if (this.state.items !== nextState.items) {
+  if (this.state.items === nextState.items) {
     return false
   }
   return true
@@ -607,12 +653,17 @@ export default class Presentation extends React.Component {
             <Image width="100%" src={images.scu03}/>
           </Slide>
           <Slide bgColor="primary" notes="If you were updating it this way... by setting a new variable to this.state.items, pushing a new item onto the array, and then calling setState with that, then you would see this bug. What would happen is that you'd never see new messages. Your shouldComponentUpdate would always return false. Why is this?">
-            <pre style={{textAlign: "left"}}>
-{`nextItems = this.state.items
-nextItems.push(msg)
-this.setState({items: nextItems})`
-}
-              </pre>
+            <pre style={{textAlign: "left"}}>{`
+            handleClick = () => {
+              let nextItems = this.state.items;
+
+              nextItems.push(msg)
+
+              this.setState({
+                items: nextItems
+              })
+            }
+            `}</pre>
           </Slide>
           <Slide bgColor="primary" notes="It's because even though you have two names for this thing">
             <Image width="100%" src={images.immutable01}/>
