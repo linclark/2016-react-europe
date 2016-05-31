@@ -36,6 +36,9 @@ var screen = function screen() {
         color: colors.secondary,
         overflow: "hidden"
       },
+      "li": {
+        marginTop: ".5em"
+      },
       "html, body": {
         height: "100%"
       },
