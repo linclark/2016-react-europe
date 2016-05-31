@@ -47,8 +47,9 @@ const imageSets = {
   keyWarning: 1,
   keys: 3,
   immutable: 6,
+  immutableComp: 2,
   keyComparison: 6,
-  scu: 5,
+  scu: 6,
   connect: 12,
 }
 
@@ -66,8 +67,6 @@ for (var prefix in imageSets) {
   }
 };
 
-
-
 preloader(images);
 
 const theme = createTheme({
@@ -76,6 +75,12 @@ const theme = createTheme({
 {
   primary: "codecartoons"
 });
+
+const summaryStyle = {
+  color: "#006dc0",
+  fontSize: "80px",
+  textAlign: "left"
+};
 
 export default class Presentation extends React.Component {
   render() {
@@ -106,18 +111,19 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>fuzzy understanding</li>
-            <li>hard to take the time to bring into focus</li>
-            <li>concepts on top</li>
-            <li>received knowledge</li>
-            <li>I want to bring into focus</li>
+            <li>fuzzy understanding of concepts around performance</li>
+            <li>we don't take the time to bring it in to focus</li>
+            <li>this means we treat the knowledge as received knowledge</li>
+            <li>and just follow recommendations like shouldComponentUpdate because someone "smarter" than us told us to</li>
+            <li>but not all recommendations work in all situations</li>
+            <li>so I want to bring these concepts around performance into focus</li>
             </ul>
             `}>
             <Image width="100%" src={images.performance02}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>better understanding</li>
+            <li>better understanding of when to use them</li>
             <li>...</li>
             <li>I'm focusing on specific part</li>
             <li>React render performance</li>
@@ -133,7 +139,7 @@ export default class Presentation extends React.Component {
             <li>What you can do to make it faster</li>
             </ul>
             `}>
-            <ol style={{textAlign: "left"}}>
+            <ol style={summaryStyle}>
             <Appear><li>The basics of browser rendering</li></Appear>
             <Appear><li>Minimizing and batching DOM changes with the virtual DOM</li></Appear>
             <Appear><li>What you can do to make it faster</li></Appear>
@@ -147,7 +153,7 @@ export default class Presentation extends React.Component {
             <li>you can think of it like how you build your web page</li>
             </ul>
             `}>
-            <ol style={{textAlign: "left"}}>
+            <ol style={summaryStyle}>
             <li>The basics of browser rendering</li>
             </ol>
           </Slide>
@@ -278,7 +284,7 @@ export default class Presentation extends React.Component {
             <li>how React minimizes work using the virtual DOM</li>
             </ul>
             `}>
-            <ol style={{textAlign: "left"}}>
+            <ol style={summaryStyle}>
             <li>The basics of browser rendering</li>
             <li>Minimizing and batching DOM changes with the virtual DOM</li>
             </ol>
@@ -309,7 +315,18 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="including components... which are basically deputy product managers in charge of specific parts of the product.">
             <Image width="100%" src={images.vdom05}/>
           </Slide>
-          <Slide bgColor="primary" notes="So now we get to this. This is what we'll be walking through. The initial render. You'll notice that we create an element as part of this... that list tag. What is an element?">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>This is the code we're looking at</li>
+            <li>in case it wasn't familiar</li>
+            <li>it is ReactDOM.render()</li>
+            <li>we pass in a React element, List in this case</li>
+            <li>and the container that we want to render into... the HTML element</li>
+            <li>...</li>
+            <li>We already talked about the container.</li>
+            <li>But what is this React element?</li>
+            </ul>
+            `}>
             <Code>
               ReactDOM.render(&lt;List /&gt;, document.getElementById("app"))
             </Code>
@@ -330,6 +347,8 @@ export default class Presentation extends React.Component {
             <li>...</li>
             <li>and what it builds using this notecard, using these requirements, is an instance of the component</li>
             <li>the thing that holds on to the state and the refs and everything.</li>
+            <li>when you call this.setState, it's the thing you're interacting with</li>
+            <li>it's what React uses to see if it needs to change the DOM</li>
             </ul>
             `}>
             <Heading size={2}>What's an element?</Heading>
@@ -355,25 +374,24 @@ export default class Presentation extends React.Component {
             `}>
             <Image width="100%" src={images.vdom08}/>
           </Slide>
-          <Slide bgColor="primary" notes="which is really just for its own organization, and will probably be removed soon.">
+          <Slide bgColor="primary" notes="TopLevelWrapper is just an implementation detail, it is one of the things that is almost definitely going to change soon">
             <Image width="100%" src={images.vdom09}/>
           </Slide>
-          <Slide bgColor="primary" notes="React creates an instance for the TopLevelWrapper.">
+          <Slide bgColor="primary" notes="React creates an instance for the TopLevelWrapper,">
             <Image width="100%" src={images.vdom10}/>
           </Slide>
-          <Slide bgColor="primary" notes="and React has wired it up so that it renders to the List component.">
+          <Slide bgColor="primary" notes="which it has wired up to render to the List element that we passed in.">
             <Image width="100%" src={images.vdom11}/>
           </Slide>
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes="so it creates an instance for that List element.">
             <Image width="100%" src={images.vdom12}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>starts creating List instance</li>
             <li>sets props and state</li>
             <li>then it wants to create corresponding DOM</li>
             <li>doesn't know how</li>
-            <li>if it were native component, it would know</li>
+            <li>if it were an internal component that React defined, it would know</li>
             <li>has to ask</li>
             </ul>
             `}>
@@ -393,13 +411,16 @@ export default class Presentation extends React.Component {
             <ul>
             <li>React creates those elements</li>
             <li>Doesn't care that it doesn't know what DOM interactions it needs for Item</li>
+            <li>...</li>
+            <li>it pulls out the div element</li>
+            <li>because that's going to be the parent... the one that contains the others</li>
             </ul>
             `}>
             <Image width="100%" src={images.vdom19}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>it creates the instance for the wrapping div</li>
+            <li>and creates an instance for it</li>
             </ul>
             `}>
             <Image width="100%" src={images.vdom21}/>
@@ -484,7 +505,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="and the DOM node too">
             <Image width="100%" src={images.vdom30}/>
           </Slide>
-         <Slide bgColor="primary" notes="and it does this two more times to create the full DOM that needs to be inserted">
+         <Slide bgColor="primary" notes="and it does this two more times to create the full set of DOM nodes">
             <Image width="100%" src={images.vdom31}/>
           </Slide>
          <Slide bgColor="primary" notes="then it goes over to the DOM and wires the children up to the parent.">
@@ -520,7 +541,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="The user clicks the button.">
             <Image width="100%" src={images.ui01}/>
           </Slide>
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes="What happens here?">
             <Image width="100%" src={images.ui02}/>
           </Slide>
           <Slide bgColor="primary" notes="React figures out the onClick handler for the click. ">
@@ -585,18 +606,23 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>then it takes this instance and puts it in an array</li>
-            <li>called dirty components array</li>
-            <li>it waits to see if any other state changes might have happened</li>
-            <li>and if they did, it would add then to the queue</li>
+            <li>then it takes this instance</li>
+            <li>and adds it to an array called dirty components array</li>
+            <li>it's just going to let that array wait there for a while</li>
+            <li>...</li>
+            <li>it's going to see if this click might have had other affects</li>
+            <li>if it might have caused other changes</li>
+            <li>If the click has caused other changes, those will also be queued up</li>
+            <li>...</li>
+            <li>Then once it's checked and queued up all changes...</li>
             </ul>
             `}>
             <Image width="100%" src={images.flush02}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>After it has taken care of other changes</li>
-            <li>comes back to queue and flushes it</li>
+            <li>React comes back to queue and flushes it</li>
+            <li>so we start processing the changes in the queue</li>
             </ul>
             `}>
             <Image width="100%" src={images.flush03}/>
@@ -615,8 +641,10 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>going to turn existing instances and elements grey</li>
-            <li>will be used for comparisons</li>
+            <li>going to grey out everything</li>
+            <li>all the work we did in the initial render</li>
+            <li>just to make it clearer</li>
+            <li>React is going to hold on to all of those and use them for comparisons</li>
             </ul>
             `}>
             <Image width="100%" src={images.ss03}/>
@@ -651,13 +679,18 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>It updates the div instance for Item #1</li>
-            <li>Since that didn't change, it figures it can save a little work. It doesn't do anything to the DOM</li>
+            <li>It gets to the first item</li>
+            <li>Needs to ask again what it renders to</li>
             </ul>
             `}>
             <Image width="100%" src={images.ss08}/>
           </Slide>
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>updates the div instance for Item #1</li>
+            <li>Since that didn't change, it figures it can save a little work. It doesn't do anything to the DOM</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.ss09}/>
           </Slide>
           <Slide bgColor="primary" notes="Now we get to the second item.">
@@ -670,25 +703,27 @@ export default class Presentation extends React.Component {
             `}>
             <Image width="100%" src={images.ss11}/>
           </Slide>
-          <Slide bgColor="primary" notes="so it goes to the DOM and makes that change">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>so it goes to the DOM and makes that change</li>
+            <li>Then it goes through that process again for the third.</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.ss12}/>
           </Slide>
-          <Slide bgColor="primary" notes="Then it does the same thing for the third.">
+          <Slide bgColor="primary" notes="">
             <Image width="100%" src={images.ss13}/>
           </Slide>
           <Slide bgColor="primary" notes="Because these happened in quick succession, they probably were handled in the same reflow">
             <Image width="100%" src={images.ss14}/>
           </Slide>
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes="So that's how React makes things faster. It figures out the smallest number of changes that it needs to make to the DOM and batches them all together so the browser can do a smaller number of reflows. But there's still a good amount of work happening here. how can we reduce this?">
             <Image width="100%" src={images.ss15}/>
           </Slide>
 
 
 
 
-          <Slide bgColor="primary" notes="So that's how React makes things faster. It figures out the smallest number of changes that it needs to make to the DOM and batches them all together so the browser can do a smaller number of reflows. But there's still a good amount of work happening here. how can we reduce this?">
-            <Image width="100%" src={images.imageName}/>
-          </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
             <li>This brings us to the third part of the talk...</li>
@@ -696,7 +731,7 @@ export default class Presentation extends React.Component {
             <li>And the first technique is probably one that you already know...</li>
             </ul>
             `}>
-            <ol style={{textAlign: "left"}}>
+            <ol style={summaryStyle}>
             <li>The basics of browser rendering</li>
             <li>Minimizing and batching DOM changes with the virtual DOM</li>
             <li>What you can do to make it faster</li>
@@ -717,28 +752,30 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes={`
             <ul>
             <li>So we're in the setState process</li>
-            <li>The part where it gets interesting is where React is dealing with the children</li>
+            <li>And this is the part where it gets interesting, where React is dealing with the children</li>
+            <li>So if you remember, where it was flattening them</li>
             </ul>
             `}>
             <Image width="100%" src={images.ss06}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>So if you remember, where it was flattening them</li>
+            <li>Turning that nested array into a flat object<li>
+            <li>and giving names to each of the children<li>
             </ul>
             `}>
             <Image width="100%" src={images.flatten03}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>And then it would update the instances</li>
+            <li>From that it updates the instances of the children</li>
             </ul>
             `}>
             <Image width="100%" src={images.ss06}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>And then compare the old and the new to see if there are any changes</li>
+            <li>And then compares the old instances and the new instances to see if changes need to be made to the DOM</li>
             </ul>
             `}>
             <Image width="100%" src={images.ss07}/>
@@ -815,8 +852,21 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="If the component says no, then React doesn't call render and doesn't do anything else to that component or its children.">
             <Image width="100%" src={images.scu05}/>
           </Slide>
-          <Slide bgColor="primary" notes="This is great, because we can skip computing the list and everything under it... If you were looking closely at that shouldComponentUpdate, though, you might have noticed a potential bug. And this ties into that other potential bug that I mentioned earlier, when we were looking at the click handler. It depends on how you're updating the state.">
+          <Slide bgColor="primary" notes="This is great, because we can skip computing the list and everything under it... ">
             <Image width="100%" src={images.scu03}/>
+          </Slide>
+          <Slide bgColor="primary" notes="so we save a good amount of work">
+            <Image width="100%" src={images.scu06}/>
+          </Slide>
+          <Slide bgColor="primary" notes="If you were looking closely at that shouldComponentUpdate, though, you might have noticed a potential bug. And this ties into that other potential bug that I mentioned earlier, when we were looking at the click handler. It depends on how you're updating the state.">
+            <pre style={{textAlign: "left"}}>
+{`shouldComponentUpdate(nextProps, nextState) {
+  if (this.state.items === nextState.items) {
+    return false
+  }
+  return true
+}`}
+              </pre>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
@@ -860,18 +910,20 @@ export default class Presentation extends React.Component {
             <li>...</li>
             <li>we coudl do a deepEquality check, where we compare the actual values</li>
             <li>but depending on how heavy that is, it might actually take us more time</li>
-            <li>Your shouldComponentUpdate would always return false. Why is this?</li>
             </ul>
             `}>
             <Image width="100%" src={images.immutable04}/>
           </Slide>
-          <Slide bgColor="primary" notes="It would be nice to have that simple, quick equals check but still catch changes to the data... and this is what immutability gives you.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="It would be nice to have that simple, quick equals check...">
+            <Image width="100%" src={images.immutableComp01}/>
+          </Slide>
+          <Slide bgColor="primary" notes="but still catch changes to the data... and this is what immutability gives you.">
+            <Image width="100%" src={images.immutableComp02}/>
           </Slide>
           <Slide bgColor="primary" notes="With immutable data, if two variables are pointing to the same object, you know that the data hasn't changed.">
-            <Image width="100%" src={images.immutable05}/>
+            <Image width="100%" src={images.immutable02}/>
           </Slide>
-          <Slide bgColor="primary" notes="If it does need you change, you create a new object. So if you're using immutable data, then you can do these simple equality checks, which are fast.">
+          <Slide bgColor="primary" notes="If it does need to change, you create a new object. So if you're using immutable data, then you can do these quick equality checks, which are fast, in shouldComponentUpdate">
             <Image width="100%" src={images.immutable06}/>
           </Slide>
 
@@ -890,7 +942,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="so the item changes, but the other items don't, and the list itself doesn't really. How can we avoid doing all the work for the whole list and all of the items that aren't changing?">
             <Image width="100%" src={images.ui12}/>
           </Slide>
-          <Slide bgColor="primary" notes="When you're just using vanilla react with local component state, it's easy. Just store the value as state on the item and call this.setState on the item. But when you're using something like Redux, this can be harder to do. But there is a way to do it.">
+          <Slide bgColor="primary" notes="When you're just using vanilla react with local component state, it's easy. Instead of storing the list of items on the List, store each item on its instance. Then call this.setState on the item. But when you're using something like Redux, this can be harder to do. However, there is a way to do it.">
             <Image width="100%" src={images.imageName}/>
           </Slide>
           <Slide bgColor="primary" notes="and that's to use connect() at a lower level in the tree. You'll probably need to rethink how you're handling your data for this to work">
@@ -908,10 +960,10 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="">
             <Image width="100%" src={images.connect04}/>
           </Slide>
-          <Slide bgColor="primary" notes="So then when you need to change an item, if you're changing things immutably, this array has to be handled as a new array. So that's triggering rerendering of the full List.">
+          <Slide bgColor="primary" notes="So then when you need to change an item,">
             <Image width="100%" src={images.connect05}/>
           </Slide>
-          <Slide bgColor="primary" notes="But we can reduce the work here. So let's see how we can make Redux just trigger the update on the connected item.">
+          <Slide bgColor="primary" notes="if you're changing things immutably, this array has to be handled as a new array. So that's triggering rerendering of the full List. So that's triggering an update at the List level. But we can reduce the work here.">
             <Image width="100%" src={images.connect06}/>
           </Slide>
           <Slide bgColor="primary" notes="If we just pass in IDs">
@@ -955,13 +1007,21 @@ export default class Presentation extends React.Component {
 
 
 
-          <Slide bgColor="primary" notes="">
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>So here are the techniques we covered</li>
+            <li>using keys to help React match previous instances to new ones</li>
+            <li>using shouldComponentUpdate to short circuit work lower in the tree</li>
+            <li>and how immutability factors into that</li>
+            <li>and structuring your data handling so that you can reduce work higher in the tree</li>
+            </ul>
+            `}>
             <Image width="100%" src={images.imageName}/>
             <div>Some options to try:</div>
-            <ul>
+            <ul style={summaryStyle}>
               <li>keys</li>
               <li>shouldComponentUpdate</li>
-              <li>immutability and PureRenderMixin</li>
+              <li>immutability</li>
               <li>using containers</li>
             </ul>
           </Slide>
