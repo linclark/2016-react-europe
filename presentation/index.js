@@ -51,7 +51,7 @@ const imageSets = {
   immutableComp: 2,
   keyComparison: 6,
   scu: 6,
-  lowerInTree: 3,
+  lowerInTree: 5,
   connect: 12,
 }
 
@@ -128,6 +128,7 @@ export default class Presentation extends React.Component {
             <li>we don't take the time to bring it in to focus</li>
             <li>this means we treat the knowledge as received knowledge</li>
             <li>and just follow recommendations like shouldComponentUpdate because someone "smarter" than us told us to</li>
+            <li>or someone who we think is smarter because they are standing on a stage talking at us</li>
             <li>but not all recommendations work in all situations</li>
             <li>so I want to bring these concepts around performance into focus</li>
             </ul>
@@ -382,6 +383,9 @@ ReactDOM.render(<List />,
             <ul>
             <li>begins construction of React's render tree</li>
             <li>if you don't follow, being recorded</li>
+            <li>if you want a version you can zoom on, check on Twitter</li>
+            <li>either linclark or codecartoons</li>
+            <li>...</li>
             <li>has changed, will again</li>
             <li>...</li>
             <li>React starts by creating the TopLevelWrapper</li>
@@ -793,7 +797,7 @@ ReactDOM.render(<List />,
             <li>And then compares the old instances and the new instances to see if changes need to be made to the DOM</li>
             </ul>
             `}>
-            <Image width="100%" src={images.ss07}/>
+            <Image width="100%" src={images.keys01}/>
           </Slide>
           <Slide bgColor="primary" notes="Let's take a closer look at how it does this comparison.">
             <Image width="100%" src={images.keyComparison03}/>
@@ -895,15 +899,15 @@ ReactDOM.render(<List />,
             </ul>
             `}>
             <pre style={{textAlign: "left"}}>{`
-            handleClick = () => {
-              let nextItems = this.state.items;
+handleClick = () => {
+  let nextItems = this.state.items;
 
-              nextItems.push(msg)
+  nextItems.push(msg)
 
-              this.setState({
-                items: nextItems
-              })
-            }
+  this.setState({
+    items: nextItems
+  })
+}
             `}</pre>
           </Slide>
           <Slide bgColor="primary" notes="It's because even though you have two names for this thing">
@@ -945,8 +949,8 @@ ReactDOM.render(<List />,
 
 
 
-          <Slide bgColor="primary" notes="with shouldComponentUpdate, you can short circuit work lower in the tree. You can short circuit the work for anything below where this.setState is called. But what if the change heppens in one of the children? do you still need to compute the whole thing? Let's walk through that case">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="with shouldComponentUpdate, you can short circuit work lower in the tree. But what if the change heppens in one of the children? do you still need to compute the whole thing? Let's walk through that case">
+            <Image width="100%" src={images.scu06}/>
           </Slide>
           <Slide bgColor="primary" notes="We have a todo list">
             <Image width="100%" src={images.ui10}/>
@@ -1006,7 +1010,7 @@ ReactDOM.render(<List />,
             <ul>
             <li>This is how you can save on work at higher levels, and sibling levels, of the tree</li>
             `}>
-            <Image width="100%" src={images.imageName}/>
+            <Image width="100%" src={images.lowerInTree04}/>
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
@@ -1018,10 +1022,8 @@ ReactDOM.render(<List />,
             <li>but this will have to be it for now.</li>
             </ul>
             `}>
-            <Image width="100%" src={images.imageName}/>
+            <Image width="100%" src={images.lowerInTree05}/>
           </Slide>
-
-
 
 
 
@@ -1031,14 +1033,14 @@ ReactDOM.render(<List />,
             <li>using keys to help React match previous instances to new ones</li>
             <li>using shouldComponentUpdate to short circuit work lower in the tree</li>
             <li>and how immutability factors into that</li>
-            <li>and structuring your data handling so that you can reduce work higher in the tree</li>
+            <li>and using setState or connect lower in the tree so that you can reduce work higher in the tree</li>
             </ul>
             `}>
             <ul style={summaryStyle}>
               <li>keys</li>
               <li>shouldComponentUpdate</li>
               <li>immutability</li>
-              <li>restructuring your state and connection points</li>
+              <li>using setState() or connect() at lower levels</li>
             </ul>
           </Slide>
           <Slide bgColor="primary" notes="I hope this has given you a good overview of a few starting points. As you can see, there are lots of tweaks you can make. Some of them are right for certain cases, some for others. Some will actually have negative impacts if used for the wrong use cases. This is why people say to measure, and hopefully this talk has given you a good framework for understanding what you're measuring.">
@@ -1046,7 +1048,7 @@ ReactDOM.render(<List />,
               <li>keys</li>
               <li>shouldComponentUpdate</li>
               <li>immutability</li>
-              <li>restructuring your state and connection points</li>
+              <li>using setState() or connect() at lower levels</li>
             </ul>
           </Slide>
 
