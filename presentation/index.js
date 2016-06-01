@@ -89,12 +89,12 @@ export default class Presentation extends React.Component {
   render() {
     return (
       <Spectacle theme={theme}>
-        <Deck transition={["fade"]} transitionDuration={1000}>
+        <Deck transition={["fade"]} transitionDuration={1000} progress={"none"} >
           <Slide bgColor="primary" notes="">
-            <Image width="100%" src={images.imageName}/>
+            <Image width="100%" src={images.title}/>
           </Slide>
           <Slide bgColor="primary" notes="Hi, I'm Lin Clark and I make code cartoons" bgImage={images.me}>
-            <Heading size="2" padding="0 120px 0 0">
+            <Heading size={2} padding="0 120px 0 0">
               Hi, I'm <Link href="https://twitter.com/linclark">@linclark</Link> and I make <Link href="https://twitter.com/codecartoons">@codecartoons</Link>.
             </Heading>
           </Slide>
@@ -1051,11 +1051,11 @@ ReactDOM.render(<List />,
           </Slide>
 
           <Slide bgColor="primary" notes="Thank you" bgImage={images.me}>
-            <Heading size="2" padding="0 120px 0 0">
+            <Heading size={2} padding="0 120px 0 0">
               Thanks!
             </Heading>
-            <Heading size="3" padding="0 120px 0 0">
-                        <Link href="https://code-cartoons.com">code-cartoons.com</Link><br />
+            <Heading size={3} padding="0 120px 0 0">
+              <Link href="https://code-cartoons.com">code-cartoons.com</Link><br />
               <Link href="https://twitter.com/codecartoons">@codecartoons</Link><br />
           </Heading>
           </Slide>

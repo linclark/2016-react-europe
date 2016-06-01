@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 /*eslint-disable object-shorthand*/
 
 var defaultColors = {
-  primary: "#f9c300",
-  secondary: "black",
-  tertiary: "white",
-  quartenary: "white"
+  primary: "#006dc0",
+  secondary: "#006dc0",
+  tertiary: "#006dc0",
+  quartenary: "#006dc0"
 };
 
 var defaultFonts = {
-  primary: "Open Sans Condensed",
-  secondary: "Lobster Two",
+  primary: "codecartoons",
+  secondary: "codecartoons",
   tertiary: "monospace"
 };
 
@@ -38,6 +38,9 @@ var screen = function screen() {
       },
       "li": {
         marginTop: ".5em"
+      },
+      "a": {
+        color: colors.secondary
       },
       "html, body": {
         height: "100%"
