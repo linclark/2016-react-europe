@@ -35,6 +35,7 @@ require("spectacle/lib/themes/default/index.css");
 
 
 const imageSets = {
+  mozilla: 2,
   performance: 2,
   calendar: 6,
   mainThread: 13,
@@ -50,11 +51,13 @@ const imageSets = {
   immutableComp: 2,
   keyComparison: 6,
   scu: 6,
+  lowerInTree: 3,
   connect: 12,
 }
 
 const images = {
   me: require("../assets/lores/me.png"),
+  title: require("../assets/lores/title.png"),
 };
 
 let num;
@@ -99,12 +102,22 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes={`
             <ul>
             <li>work for mozilla</li>
-            <li>tofino</li>
-            <li>but I'm not here to talk about that</li>
+            <li>on a browser, but not the one that you might think</li>
+            </ul>
+            `}>
+            <Image width="100%" src={images.mozilla01}/>
+          </Slide>
+          <Slide bgColor="primary" notes={`
+            <ul>
+            <li>we're working on an experimental new browser</li>
+            <li>called project tofino</li>
+            <li>and it's built with React</li>
+            <li>so if you want to hear more about that, ask me afterwards</li>
+            <li>because I'm not here to talk about that</li>
             <li>here to talk about performance</li>
             </ul>
             `}>
-            <Image width="100%" src={images.imageName}/>
+            <Image width="100%" src={images.mozilla02}/>
           </Slide>
           <Slide bgColor="primary" notes="I should start by saying I'm not going to be telling you anything that you haven't already heard. I'm going to be talking about things like keys, and shouldComponentUpdate, and immutability. The reason I wanted to talk about them though...">
             <Image width="100%" src={images.performance01}/>
@@ -134,13 +147,13 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes={`
             <ul>
             <li>So the talk's going to go a little something like this</li>
-            <li>The basics of browser rendering</li>
+            <li>The basics of rendering in the browser</li>
             <li>Minimizing and batching DOM changes with the virtual DOM</li>
             <li>What you can do to make it faster</li>
             </ul>
             `}>
             <ol style={summaryStyle}>
-            <Appear><li>The basics of browser rendering</li></Appear>
+            <Appear><li>The basics of rendering in the browser</li></Appear>
             <Appear><li>Minimizing and batching DOM changes with the virtual DOM</li></Appear>
             <Appear><li>What you can do to make it faster</li></Appear>
             </ol>
@@ -154,7 +167,7 @@ export default class Presentation extends React.Component {
             </ul>
             `}>
             <ol style={summaryStyle}>
-            <li>The basics of browser rendering</li>
+            <li>The basics of rendering in the browser</li>
             </ol>
           </Slide>
 
@@ -285,7 +298,7 @@ export default class Presentation extends React.Component {
             </ul>
             `}>
             <ol style={summaryStyle}>
-            <li>The basics of browser rendering</li>
+            <li>The basics of rendering in the browser</li>
             <li>Minimizing and batching DOM changes with the virtual DOM</li>
             </ol>
           </Slide>
@@ -327,9 +340,11 @@ export default class Presentation extends React.Component {
             <li>But what is this React element?</li>
             </ul>
             `}>
-            <Code>
-              ReactDOM.render(&lt;List /&gt;, document.getElementById("app"))
-            </Code>
+<pre style={{textAlign: "left"}}>{`
+ReactDOM.render(<List />,
+                document.getElementById("app"))
+`}
+</pre>
           </Slide>
           <Slide bgColor="primary" notes="It's a way for your code to hand off requirements to React... to tell React what needs to be displayed. Following the analogy... ">
             <Heading size={2}>What's an element?</Heading>
@@ -732,7 +747,7 @@ export default class Presentation extends React.Component {
             </ul>
             `}>
             <ol style={summaryStyle}>
-            <li>The basics of browser rendering</li>
+            <li>The basics of rendering in the browser</li>
             <li>Minimizing and batching DOM changes with the virtual DOM</li>
             <li>What you can do to make it faster</li>
             </ol>
@@ -939,22 +954,25 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="and we check off one of the items">
             <Image width="100%" src={images.ui11}/>
           </Slide>
-          <Slide bgColor="primary" notes="so the item changes, but the other items don't, and the list itself doesn't really. How can we avoid doing all the work for the whole list and all of the items that aren't changing?">
+          <Slide bgColor="primary" notes="so the item changes, but the other items don't, and the list itself doesn't really. How can we avoid doing all the work for the whole list and all of the items that aren't changing? When you're just using vanilla react with local component state, it's pretty easy. ">
             <Image width="100%" src={images.ui12}/>
           </Slide>
-          <Slide bgColor="primary" notes="When you're just using vanilla react with local component state, it's easy. Instead of storing the list of items on the List, store each item on its instance. Then call this.setState on the item. But when you're using something like Redux, this can be harder to do. However, there is a way to do it.">
-            <Image width="100%" src={images.imageName}/>
+          <Slide bgColor="primary" notes="Just restructure your state so you can call setState lower in the tree. But when you're using something like Redux, this can be harder to do.">
+            <Image width="100%" src={images.lowerInTree01}/>
+          </Slide>
+          <Slide bgColor="primary" notes="That's because you're firing off actions, and then the state is coming in through connect(), which is usually at the top of the tree.  However, there is a way to do it.">
+            <Image width="100%" src={images.lowerInTree02}/>
           </Slide>
           <Slide bgColor="primary" notes="and that's to use connect() at a lower level in the tree. You'll probably need to rethink how you're handling your data for this to work">
-            <Image width="100%" src={images.imageName}/>
+            <Image width="100%" src={images.lowerInTree03}/>
           </Slide>
-          <Slide bgColor="primary" notes="Because you'd have a structure like this">
+          <Slide bgColor="primary" notes="Because you'd have a component structure like this">
             <Image width="100%" src={images.connect01}/>
           </Slide>
           <Slide bgColor="primary" notes="And most people would pass the array of items">
             <Image width="100%" src={images.connect02}/>
           </Slide>
-          <Slide bgColor="primary" notes="It would pass those down to each item element.">
+          <Slide bgColor="primary" notes="The list would pass those down to each item element.">
             <Image width="100%" src={images.connect03}/>
           </Slide>
           <Slide bgColor="primary" notes="">
@@ -963,7 +981,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes="So then when you need to change an item,">
             <Image width="100%" src={images.connect05}/>
           </Slide>
-          <Slide bgColor="primary" notes="if you're changing things immutably, this array has to be handled as a new array. So that's triggering rerendering of the full List. So that's triggering an update at the List level. But we can reduce the work here.">
+          <Slide bgColor="primary" notes="since you're changing things immutably, this array has to be handled as a new array. So that's triggering an update at the List level. But we can reduce the work here.">
             <Image width="100%" src={images.connect06}/>
           </Slide>
           <Slide bgColor="primary" notes="If we just pass in IDs">
@@ -1016,17 +1034,30 @@ export default class Presentation extends React.Component {
             <li>and structuring your data handling so that you can reduce work higher in the tree</li>
             </ul>
             `}>
-            <Image width="100%" src={images.imageName}/>
-            <div>Some options to try:</div>
             <ul style={summaryStyle}>
               <li>keys</li>
               <li>shouldComponentUpdate</li>
               <li>immutability</li>
-              <li>using containers</li>
+              <li>restructuring your state and connection points</li>
             </ul>
           </Slide>
           <Slide bgColor="primary" notes="I hope this has given you a good overview of a few starting points. As you can see, there are lots of tweaks you can make. Some of them are right for certain cases, some for others. Some will actually have negative impacts if used for the wrong use cases. This is why people say to measure, and hopefully this talk has given you a good framework for understanding what you're measuring.">
-            <Image width="100%" src={images.imageName}/>
+            <ul style={summaryStyle}>
+              <li>keys</li>
+              <li>shouldComponentUpdate</li>
+              <li>immutability</li>
+              <li>restructuring your state and connection points</li>
+            </ul>
+          </Slide>
+
+          <Slide bgColor="primary" notes="Thank you" bgImage={images.me}>
+            <Heading size="2" padding="0 120px 0 0">
+              Thanks!
+            </Heading>
+            <Heading size="3" padding="0 120px 0 0">
+                        <Link href="https://code-cartoons.com">code-cartoons.com</Link><br />
+              <Link href="https://twitter.com/codecartoons">@codecartoons</Link><br />
+          </Heading>
           </Slide>
         </Deck>
       </Spectacle>
