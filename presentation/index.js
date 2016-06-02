@@ -125,7 +125,7 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes={`
             <ul>
             <li>fuzzy understanding of concepts around performance</li>
-            <li>we don't take the time to bring it in to focus</li>
+            <li>we don't take the time to bring them in to focus</li>
             <li>this means we treat the knowledge as received knowledge</li>
             <li>and just follow recommendations like shouldComponentUpdate because someone "smarter" than us told us to</li>
             <li>or someone who we think is smarter because they are standing on a stage talking at us</li>
@@ -137,7 +137,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
-            <li>better understanding of when to use them</li>
+            <li>better understanding of the why behind each recommendation</li>
             <li>...</li>
             <li>I'm focusing on specific part</li>
             <li>React render performance</li>
