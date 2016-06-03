@@ -402,15 +402,19 @@ ReactDOM.render(<List />,
           <Slide bgColor="primary" notes="which it has wired up to render to the List element that we passed in.">
             <Image width="100%" src={images.vdom11}/>
           </Slide>
-          <Slide bgColor="primary" notes="so it creates an instance for that List element.">
-            <Image width="100%" src={images.vdom12}/>
-          </Slide>
           <Slide bgColor="primary" notes={`
             <ul>
+            <li>so it creates an instance of List</li>
             <li>sets props and state</li>
             <li>then it wants to create corresponding DOM</li>
             <li>doesn't know how</li>
             <li>if it were an internal component that React defined, it would know</li>
+            </ul>
+            `}>
+            <Image width="100%" src={images.vdom12}/>
+          </Slide>
+          <Slide bgColor="primary" notes={`
+            <ul>
             <li>has to ask</li>
             </ul>
             `}>
