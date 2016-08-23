@@ -102,22 +102,14 @@ export default class Presentation extends React.Component {
           <Slide bgColor="primary" notes={`
             <ul>
             <li>work for mozilla</li>
-            <li>on a browser, but not the one that you might think</li>
+            <li>where I've hacked on a few different browsers</li>
+            <li>one that is written in React</li>
+            <li>I've had to dig deep into how React works</li>
+            <li>stepping through React's internals over and over again</li>
+            <li></li>
             </ul>
             `}>
             <Image width="100%" src={images.mozilla01}/>
-          </Slide>
-          <Slide bgColor="primary" notes={`
-            <ul>
-            <li>we're working on an experimental new browser</li>
-            <li>called project tofino</li>
-            <li>and it's built with React</li>
-            <li>so if you want to hear more about that, ask me afterwards</li>
-            <li>because I'm not here to talk about that</li>
-            <li>here to talk about performance</li>
-            </ul>
-            `}>
-            <Image width="100%" src={images.mozilla02}/>
           </Slide>
           <Slide bgColor="primary" notes="I should start by saying I'm not going to be telling you anything that you haven't already heard. I'm going to be talking about things like keys, and shouldComponentUpdate, and immutability. The reason I wanted to talk about them though...">
             <Image width="100%" src={images.performance01}/>
